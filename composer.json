@@ -1,0 +1,25 @@
+{
+    "name": "fr3nch13/phpdoc-markdown",
+    "description": "phpDocumentor template that generates Markdown documentation.",
+    "keywords" : [ "PHPDoc", "phpDocumentor", "Documentation", "Markdown" ],
+    "homepage" : "https://dfir-bedlam.ocio.nih.gov/fr3nch13/phpdoc-markdown",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Carl Vuorinen",
+            "email": "carl.vuorinen@gmail.com"
+        },
+        {
+            "name": "Brian French",
+            "email": "brian.french@nih.gov"
+        }
+    ],
+    "require": {
+        "phpdocumentor/phpdocumentor": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "fr3nch13\\PhpdocMarkdown\\": "src"
+        }
+    }
+}
