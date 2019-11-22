@@ -11,7 +11,7 @@
  * @param array $results The results placed in this array.
  * @return array the list of files.
  */
-function getDirContents(string $dir = null, &$results = [])
+function getDirContents($dir = null, &$results = [])
 {
     $files = scandir($dir);
 
