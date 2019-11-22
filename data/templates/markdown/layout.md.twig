@@ -2,7 +2,7 @@
 {% use 'elements/property.md.twig' %}
 {% use 'elements/method.md.twig' %}
 {% use 'elements/namespaces.sidebar.md.twig' %}
-# [{{ project.name }}]({{  path('home') }})
+# [{{ project.name }}]({{  path('home') }}.md)
 
 # {% block title %}{% endblock %}
 
@@ -14,7 +14,7 @@
 ### Top Namespaces
 
 {% for namespace in project.namespace.children|sort_asc %}
-* [{{ namespace }}]({{ namespace|route('url')|raw }})
+* [{{ namespace }}]({{ namespace|route('url')|raw }}.md)
 {% endfor %}
 
 ---
@@ -22,11 +22,11 @@
 
 ### Reports
 {% set errorCount = 0 %}{% for file in project.files %}{% set errorCount = errorCount + file.allerrors.count %}{% endfor %}
-* [Errors - {{ errorCount }}]({{ path('reports/errors') }})
+* [Errors - {{ errorCount }}]({{ path('reports/errors') }}.md)
 {% set markerCount = 0 %}{% for file in project.files %}{% set markerCount = markerCount + file.markers.count %}{% endfor %}
-* [Markers - {{ markerCount }}]({{ path('reports/markers') }})
+* [Markers - {{ markerCount }}]({{ path('reports/markers') }}.md)
 {% set deprecatedCount = 0 %}{% for element in project.indexes.elements if element.deprecated %}{% set deprecatedCount = deprecatedCount + element.tags.deprecated.count %}{% endfor %}
-* [Deprecated - {{ deprecatedCount }}]({{ path('reports/deprecated') }})
+* [Deprecated - {{ deprecatedCount }}]({{ path('reports/deprecated') }}.md)
 
 ---
 
