@@ -40,9 +40,9 @@ foreach ($htmlFiles as $htmlFilePath) {
     print("$htmlFilePath\n");
     $content = file_get_contents($htmlFilePath);
     // .html)
-    $content = str_replace('.html)', ')', $content);
+    $content = str_replace('.html)', '.md)', $content);
     // .html#property_id)
-    $content = preg_replace('/\.html(\#[\w\_]+)\)/', '$1)', $content);
+    $content = preg_replace('/\.html(\#[\w\_]+)\)/', '.md$1)', $content);
     file_put_contents($htmlFilePath, $content);
     $mdFilePath = preg_replace('/\.html$/', '.md', $htmlFilePath);
     rename($htmlFilePath, $mdFilePath);
