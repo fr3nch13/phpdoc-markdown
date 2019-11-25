@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "phpdocumentor/phpdocumentor": "dev-master"
+        "phpdocumentor/phpdocumentor": "<=2.9.0"
     },
     "autoload": {
         "psr-4": {
