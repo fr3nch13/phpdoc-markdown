@@ -74,3 +74,5 @@ $ composer phpdoc
 ```
 
 More information about [configuring phpDocumentor](http://www.phpdoc.org/docs/latest/references/configuration.html).
+
+[Packagist: fr3nch13/phpdoc-markdown](https://packagist.org/packages/fr3nch13/phpdoc-markdown)
