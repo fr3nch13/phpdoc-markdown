@@ -15,7 +15,8 @@
         }
     ],
     "require": {
-        "phpdocumentor/phpdocumentor": "^2.9.0"
+        "phpdocumentor/phpdocumentor": "^2.9.0",
+        "jms/serializer": "^1.13"
     },
     "autoload": {
         "psr-4": {
