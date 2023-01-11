@@ -1,0 +1,13 @@
+{%- macro buildUrl(element) -%}
+{% import _self as self %}
+[{{ element }}](../{{ element|route('url')|raw }})
+{% endmacro %}
+
+{%- macro buildNamespaceBreadcrumb(node) -%}
+{% import _self as self %}
+{% set breadcrumbs = usesNamespaces ? breadcrumbs(node) : packages(node) %}
+{% for breadcrumb in breadcrumbs %}
+[{{ '\\' ~ breadcrumb.name }}](../{{ breadcrumb|route('url')|raw }})
+{% endfor %}
+{{ '\\' ~ node.name }}
+{% endmacro %}

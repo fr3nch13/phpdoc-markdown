@@ -1,5 +1,5 @@
 {% block property %}
-<a name="property_{{ property.name }}"></a>
+<a id="property_{{ property.name }}"></a>
 #### {{ property.visibility }} ${{ property.name }}{% if property.types %} : {{ property.types|join('|') }}{% endif %}{% if property.deprecated %} - (deprecated){% endif %}
 
 ---

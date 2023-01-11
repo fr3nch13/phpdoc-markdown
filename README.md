@@ -1,8 +1,8 @@
-# phpDocumentor markdown template
+# phpDocumentor v3 markdown template
 
-[phpDocumentor template](http://www.phpdoc.org/docs/latest/getting-started/changing-the-look-and-feel.html) that generates Markdown documentation.
+[phpDocumentor v3 template](https://docs.phpdoc.org/3.0/guide/features/theming/index.html) that generates Markdown documentation.
 
-This is basically a markdown version of phpDocumentor's Clean template.
+This is a heavily modified version of a [phpDocumentor v2 markdown template](https://github.com/fr3nch13/phpdoc-markdown).
 
 The main use-case for this template is to generate simple and nice looking usage documentation, that can then be published on GitHub/GitLab.
 
@@ -13,44 +13,32 @@ For example, a small library can document it's public API in DocBlock comments, 
 Install with composer:
 
 ```bash
-composer require fr3nch13/phpdoc-markdown
+composer require ramynasr/phpdoc-markdown
 ```
 
 ## Usage
 
-Run phpDocumentor and set template as `vendor/fr3nch13/phpdoc-markdown/data/templates/markdown`.
-
-This requires the usage of the `phpdoc.xml` file as phpDocumentor only generates html files, and they need to be changed to md files, and the links in the generated templates need to be modified.
-This is done using a php script in the bin/directory that uses the `phpdoc.xml` file to know where the generated templates are located.
-
+Run phpDocumentor and set template as `vendor/ramynasr/phpdoc-markdown/data/templates/markdown`.
 **Example using configuration file:**
 
-Add a file called `phpdoc.xml` with the following content to the root of your project and invoke the `phpdoc` command without arguments. Modify the configuration to suit your project.
+Add a file called `phpdoc.xml` (or `phpdoc.dist.xml`) with the following content to the root of your project and invoke the `phpdoc` command without arguments.
+Modify the configuration to suit your project. You can read more about [phpDocumentor v3 configuration here](https://docs.phpdoc.org/3.0/guide/references/configuration.html).
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpdoc>
-    <title>My Project Documentation</title>
-    <parser>
-        <target>build</target>
-    </parser>
-    <transformer>
-        <target>docs</target>
-    </transformer>
-    <transformations>
-        <template name="vendor/fr3nch13/phpdoc-markdown/data/templates/markdown" />
-    </transformations>
-    <files>
-        <directory>src</directory>
-        <ignore>test/*</ignore>
-    </files>
-</phpdoc>
+<phpdocumentor configVersion="3.0">
+    <paths>
+        <output>docs</output>
+        <cache>.phpdoc/cache</cache>
+    </paths>
+    <template name="markdown" location="vendor/ramynasr/phpdoc-markdown/data/templates" />
+</phpdocumentor>
 ```
 
-After you've created the phpdoc.xml, you can now run phpdoc without arguments, then run the php script to fix the generated files.
+After you've created the configuration file, you can now run phpdoc without arguments, then run the php script to fix the generated files.
 
 ```bash
-$ vendor/bin/phpdoc && php vendor/fr3nch13/phpdoc-markdown/bin/fixHtmltoMd.php
+./vendor/bin/phpdoc && php ./vendor/ramynasr/phpdoc-markdown/bin/html-to-md.php --dir="docs"
 ```
 
 Or, you can add it to your composer.json scripts section, this is how I do it.
@@ -64,15 +52,11 @@ Or, you can add it to your composer.json scripts section, this is how I do it.
         "@phpdoc-fix"
     ],
     "phpdoc-run": "vendor/bin/phpdoc -v",
-    "phpdoc-fix": "php vendor/fr3nch13/phpdoc-markdown/bin/fixHtmlToMd.php"
+    "phpdoc-fix": "php vendor/ramynasr/phpdoc-markdown/bin/html-to-md.php"
 }
 ```
 
 Then run:
 ```bash
-$ composer phpdoc
+composer phpdoc
 ```
-
-More information about [configuring phpDocumentor](http://www.phpdoc.org/docs/latest/references/configuration.html).
-
-[Packagist: fr3nch13/phpdoc-markdown](https://packagist.org/packages/fr3nch13/phpdoc-markdown)

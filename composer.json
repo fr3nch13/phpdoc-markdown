@@ -1,26 +1,16 @@
 {
-    "name": "fr3nch13/phpdoc-markdown",
-    "description": "phpDocumentor template that generates Markdown documentation.",
-    "keywords" : [ "PHPDoc", "phpDocumentor", "Documentation", "Markdown" ],
-    "homepage" : "https://dfir-bedlam.ocio.nih.gov/fr3nch13/phpdoc-markdown",
+    "name": "ramynasr/phpdoc-markdown",
+    "description": "phpDocumentor v3 template that generates Markdown documentation for Github.",
+    "keywords" : [ "PHPDoc", "phpDocumentor", "Documentation", "Markdown", "Template", "Github" ],
+    "homepage" : "https://github.com/ramynasr/phpdoc-markdown",
     "license": "MIT",
     "authors": [
         {
-            "name": "Carl Vuorinen",
-            "email": "carl.vuorinen@gmail.com"
-        },
-        {
-            "name": "Brian French",
-            "email": "brian.french@nih.gov"
+            "name": "Ramy Nasr",
+            "homepage": "https://www.ramynasr.dev"
         }
     ],
-    "require": {
-        "phpdocumentor/phpdocumentor": "^2.9.0",
-        "jms/serializer": "^1.13"
-    },
-    "autoload": {
-        "psr-4": {
-            "fr3nch13\\PhpdocMarkdown\\": "src"
-        }
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "^3.0"
     }
 }

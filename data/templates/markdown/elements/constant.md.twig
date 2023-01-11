@@ -1,11 +1,12 @@
 {% block constant %}
-<a name="constant_{{ constant.name }}" class="anchor"></a>
+<a id="constant_{{ constant.name }}"></a>
 ###### {% if constant.deprecated %}~~{{ constant.name }}~~{% else %}{{ constant.name }}{% endif %}
 {% if (node.parent is not null and constant.parent.fullyQualifiedStructuralElementName != node.fullyQualifiedStructuralElementName) %}
-Inherited from [{{ constant.parent.fullyQualifiedStructuralElementName }}]({{ constant.parent|route('url') }})
+Inherited from [{{ constant.parent.fullyQualifiedStructuralElementName }}]({{ link(constant.parent) }})
 {% endif %}
 {% if constant.summary|length > 0 %}
-*{{ constant.summary }}*
+
+{{ constant.summary }}
 {% endif %}
 
 ```
@@ -20,11 +21,6 @@ Inherited from [{{ constant.parent.fullyQualifiedStructuralElementName }}]({{ co
 **deprecated**
 {{ constant.tags.deprecated[0].description }}
 {% endif %}
-{#
-{% if (node.parent is null) %}
-[{{ node.path }}]({{ node.file|route('url') }})
-{% endif %}
-#}
 {% if constant.tags|length > 0 %}
 {% for tagName,tags in constant.tags if tagName in ['link', 'see'] %}
 {% if loop.first %}
@@ -35,18 +31,11 @@ Inherited from [{{ constant.parent.fullyQualifiedStructuralElementName }}]({{ co
 * [{{ tag.description ?: tag.reference }}]({{ tag.reference|route('url') ?: tag.link }})
 {% endfor %}
 {% endfor %}
-{% for tagName,tags in constant.tags if tagName in ['uses'] %}
-{% if loop.first %}
-**Uses:**
-
-{% endif %}
-{% for tag in tags %}
-* [{{ tag.description ?: tag.reference }}]({{ tag.reference|route('url') }})
-{% endfor %}
-{% endfor %}
-| Tag | Version | Desc |
-| --- | ------- | ---- |
 {% for tagName,tags in constant.tags if tagName not in ['link', 'see', 'var', 'deprecated', 'uses'] %}
+{% if loop.first %}
+| Tag | Version | Desc |
+|-----|---------|------|
+{% endif %}
 | {{ tagName }} | {% for tag in tags %}{% if tag.version %}{{ tag.version }}{% endif %}{% endfor %} | {% for tag in tags %}{{ tag.description }}{% endfor %} |
 {% endfor %}
 {% endif %}

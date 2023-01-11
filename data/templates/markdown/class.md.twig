@@ -1,23 +1,30 @@
 {% extends 'layout.md.twig' %}
-{% block title %}{% if node.final %}Final {% endif %}{% if node.abstract %}Abstract {% endif %}Class: {{ node.fullyQualifiedStructuralElementName }}{% endblock %}
+{% import 'base/macros.md.twig' as macros %}
+{% set constants = constants(node) %}
+{% set properties = properties(node) %}
+{% set methods = methods(node) %}
+{% block title %}
+{% if node.final %}Final {% endif %}{% if node.abstract %}Abstract {% endif %}Class: {{ parent() }}
+{% endblock %}
+
 {% block content %}
-### Namespace: [{{ node.namespace }}]({{ node.namespace|route('url')|raw }})
----
-{% if node.summary|length > 0%}
-**Summary:**
+{% if node.summary|length > 0 %}
+## Summary:
 
 {{ node.summary|raw }}
 
 {% endif %}
-{% if node.description|length > 0%}
-**Description:**
+{% if node.description|length > 0 %}
+## Description:
 
 {{ node.description|raw }}
 
 {% endif %}
 {% for tagName,tags in node.tags if tagName in ['example'] %}
 {% if loop.first %}
+
 ---
+
 ### Examples
 {% endif %}
 {% for tag in tags %}
@@ -25,139 +32,91 @@
 {{ tag.example|escape }}
 {% endfor %}
 {% endfor %}
----
-### Constants
-{% for constant in node.inheritedConstants.merge(node.constants) %}
-* [{{ constant.visibility }} {{ constant.name }}]({{ constant|route('url')}}){{ constant.deprecated ? ' - (deprecated)' }}
-{% else %}
-* No constants found
-{% endfor %}
----
-### Properties
-{% for property in node.inheritedProperties.merge(node.properties.merge(node.magicProperties)) if property.visibility == 'public' %}
-* [{{ property.visibility }} ${{ property.name }}]({{ property|route('url')}}){{ property.deprecated ? ' - (deprecated)' }}
-{% endfor %}
-{% for property in node.inheritedProperties.merge(node.properties.merge(node.magicProperties)) if property.visibility == 'protected' %}
-* [{{ property.visibility }} ${{ property.name }}]({{ property|route('url')}}){{ property.deprecated ? ' - (deprecated)' }}
-{% endfor %}
-{% for property in node.inheritedProperties.merge(node.properties.merge(node.magicProperties)) if property.visibility == 'private' %}
-* [{{ property.visibility }} ${{ property.name }}]({{ property|route('url')}}){{ property.deprecated ? ' - (deprecated)' }}
-{% endfor %}
----
-### Methods
-{% for method in node.inheritedMethods.merge(node.methods.merge(node.magicMethods)) if method.visibility == 'public' %}
-* [{{ method.visibility }} {{ method.name }}()]({{ method|route('url')}}){{ method.deprecated ? ' - (deprecated)' }}
-{% endfor %}
-{% for method in node.inheritedMethods.merge(node.methods.merge(node.magicMethods)) if method.visibility == 'protected' %}
-* [{{ method.visibility }} {{ method.name }}()]({{ method|route('url')}}){{ method.deprecated ? ' - (deprecated)' }}
-{% endfor %}
-{% for method in node.inheritedMethods.merge(node.methods.merge(node.magicMethods)) if method.visibility == 'private' %}
-* [{{ method.visibility }} {{ method.name }}()]({{ method|route('url')}}){{ method.deprecated ? ' - (deprecated)' }}
-{% endfor %}
----
-### Details
-* File: [{{ node.path }}]({{ node.file|route('url') }})
-{% if node.package.name is not empty and node.package.name != '\\' %}
-* Package: {{ node.package.parent.name != '\\' ? (node.package.parent.name ~ '\\' ~ node.package.name) : node.package.name }}
-{% endif %}
-* Class Hierarchy:{% set class = node.parent %}
-{% block hierarchy_element %}
-{% if class %}{% set child = class %}{% set class = class.parent %} {{ block('hierarchy_element') }}
-  * [{{ child }}]({{ child|route('url')|raw }}){% endif %}
-{% endblock %}
+{% for constant in constants %}
+{%  if loop.first %}
 
-  * {{ node.fullyQualifiedStructuralElementName}}
+---
+
+### Constants
+{% endif %}
+* {{ constant.visibility }} [{{ constant.name }}]({{ '#constant_' ~ constant.name }}){{ constant.deprecated ? ' - (deprecated)' }}
+{% endfor %}
+{% for property in properties|sortByVisibility %}
+{%  if loop.first %}
+
+---
+
+### Properties
+{% endif %}
+* {{ property.visibility }} $[{{ property.name }}]({{ '#property_' ~ property.name }}){{ property.deprecated ? ' - (deprecated)' }}
+{% endfor %}
+{% for method in methods|sortByVisibility %}
+{%  if loop.first %}
+
+---
+
+### Methods
+
+{% endif %}
+* {{ method.visibility }} [{{ method.name }}()]({{ '#method_' ~ method.name }}){{ method.deprecated ? ' - (deprecated)' }}
+{% endfor %}
+
+---
+
+### Details
+
+* File: [{{ node.path }}]({{ '../' ~ path(node.file) }})
 {% for interface in node.interfaces %}
 {% if loop.first %}
 * Implements:
 {% endif %}
-  * [{{ interface.fullyQualifiedStructuralElementName }}]({{ interface|route('url') }})
+  * [{{ interface }}]({{ link(interface) }})
 {% endfor %}
 {% for trait in node.usedTraits %}
 {% if loop.first %}
 * Uses Traits:
 {% endif %}
-{% if trait.fullyQualifiedStructuralElementName %}
-  * [{{ trait.fullyQualifiedStructuralElementName ?: trait }}]({{ trait|route('url') }})
-{% else %}
-  * {{ trait.fullyQualifiedStructuralElementName ?: trait }}
-{% endif %}
+  * [{{ trait }}]({{ link(trait) }})
 {% endfor %}
-{# TODO: expensive action; replace with an index or precompiled list in descriptors #}
-{# {% for child in project.indexes.elements if child.parent.fullyQualifiedStructuralElementName == node.fullyQualifiedStructuralElementName %}
-{% if loop.first %}
-* Children:
-{% endif %}
-  * [{{ child.fullyQualifiedStructuralElementName }}]({{ child|route('url') }})
-{% endfor %} #}
 {% for tagName,tags in node.tags if tagName in ['link', 'see'] %}
 {% if loop.first %}
 * See Also:
 {% endif %}
 {% for tag in tags %}
-  * [{{ tag.description ?: tag.reference }}]({{ (tag.reference|route('url')) ?: tag.link }})
+  * [{{ tag.reference }}]({{ '../' ~ tag.reference|route('url') }})
 {% endfor %}
 {% endfor %}
-{% for tagName,tags in node.tags if tagName in ['uses'] %}
-{% if loop.first %}
-* Uses:
-{% endif %}
-{% for tag in tags %}
-  * [{{ tag.description ?: tag.reference }}]({{ (tag.reference|route('url')) }})
-{% endfor %}
-{% endfor %}
-{% set tagCount = 0 %}
-{% for tagName,tags in node.tags if tagName not in ['link', 'see', 'uses', 'abstract', 'example', 'method', 'property', 'property-read', 'property-write', 'package', 'subpackage'] %}
-{% for tag in tags %}
-{% set tagCount = tagCount + 1 %}
-{% endfor %}
-{% endfor %}
-{% if tagCount > 0 %}
+{% if constants is not empty %}
+
 ---
-### Tags
-| Tag | Version | Description |
-| --- | ------- | ----------- |
-{% for tagName,tags in node.tags if tagName not in ['link', 'see', 'uses', 'abstract', 'example', 'method', 'property', 'property-read', 'property-write', 'package', 'subpackage'] %}
-{% for tag in tags %}
-| {{ tagName }} | {% if tag.version %}{{ tag.version }}{% endif %} | {{ tag.description|raw }} |
-{% endfor %}
-{% endfor %}
-{% endif %}
-{% set constants = node.inheritedConstants.merge(node.constants) %}
-{% if constants|length > 0 %}
----
+
 ## Constants
 {% for constant in constants %}
 {{ block('constant') }}
 {% endfor %}
 {% endif %}
-{% set properties = node.inheritedProperties.merge(node.properties.merge(node.magicProperties)) %}
-{% if properties|length > 0 %}
+{% if properties is not empty %}
+
 ---
+
 ## Properties
-{% for property in properties if property.visibility == 'public' %}
-{{ block('property') }}
-{% endfor %}
-{% for property in properties if property.visibility == 'protected' %}
-{{ block('property') }}
-{% endfor %}
-{% for property in properties if property.visibility == 'private' %}
+{% for property in properties|sortByVisibility %}
 {{ block('property') }}
 {% endfor %}
 {% endif %}
+{% if methods is not empty %}
 
-{% set methods = node.inheritedMethods.merge(node.methods.merge(node.magicMethods)) %}
-{% if methods|length > 0 %}
 ---
+
 ## Methods
-{% for method in methods if method.visibility == 'public' %}
-{{ block('method') }}
-{% endfor %}
-{% for method in methods if method.visibility == 'protected' %}
-{{ block('method') }}
-{% endfor %}
-{% for method in methods if method.visibility == 'private' %}
-{{ block('method') }}
+
+{% for method in methods|sortByVisibility %}
+{{- block('method') -}}
+{% if not loop.last %}
+
+---
+
+{% endif %}
 {% endfor %}
 {% endif %}
 {% endblock %}
