@@ -1,3 +1,7 @@
+# Archived.
+I'm archiving this project, but I'll keep it up if anyone wants to fork it.
+The last time I tried ig with phpdoc was version 2.9.0, so I'm pretty sure it will no longer with with version 3.x
+
 # phpDocumentor markdown template
 
 [phpDocumentor template](http://www.phpdoc.org/docs/latest/getting-started/changing-the-look-and-feel.html) that generates Markdown documentation.
